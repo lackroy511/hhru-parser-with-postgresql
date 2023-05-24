@@ -31,3 +31,5 @@ CREATE TABLE vacancies
     CONSTRAINT pk_vacancies_vacancy_id PRIMARY KEY (vacancy_id),
     CONSTRAINT fk_vacancies_employer_id FOREIGN KEY (employer_id) REFERENCES employers(employer_id)
 );
+
+

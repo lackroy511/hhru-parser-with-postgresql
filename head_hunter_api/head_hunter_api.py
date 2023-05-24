@@ -43,10 +43,10 @@ class HeadHunterAPI(BaseClassForAPI):
         }
         vacancies_data = {'items': []}
 
+
         while True:
             response = requests.get(self.url_for_employer_vacancies, params=params)
             data = response.json()
-
             vacancies_data['items'].extend(data['items'])
 
             params['page'] += 1
