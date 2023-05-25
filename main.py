@@ -129,7 +129,7 @@ def main():
 
             else:
                 input('Нет такого действия! Нажмите Enter, что бы попробовать еще раз: ')
-
+    conn.close()
 
 if __name__ == '__main__':
     main()
