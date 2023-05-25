@@ -43,7 +43,7 @@ def main():
             print('5. Потестить метод DBManagerHhRu "get_avg_salary()"')
             print('6. Потестить метод DBManagerHhRu "get_vacancies_with_higher_salary()"')
             print('7. Ввести слово и потестить метод DBManagerHhRu "get_vacancies_with_keyword()"')
-            print('8. Выкл.')
+            print('0. Выкл.')
             print()
             user_input = input('Номер действия: ')
 
@@ -64,7 +64,6 @@ def main():
                             colour='#747671',
                             bar_format='Заполнение таблиц:|{bar}|Emp.count|{n_fmt}/{total_fmt}'
                             )
-                print('\nЭто займет немного времени, ждите плз:\n')
                 try:
                     for employer_id in pbar:
                         hh_ru_api = HeadHunterAPI(employer_id)
@@ -130,6 +129,7 @@ def main():
             else:
                 input('Нет такого действия! Нажмите Enter, что бы попробовать еще раз: ')
     conn.close()
+
 
 if __name__ == '__main__':
     main()
