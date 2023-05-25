@@ -28,6 +28,7 @@ def main():
     user_input = input("Ваш выбор: ")
     if user_input == '1':
         create_database(params, db_name)
+        input('\nБаза данных успешно создана, нажмите "Enter": ')
 
     # Цикл меню, где можно проверить работу кода в проекте.
     # Навигация путем ввода цифр, соответствующих пунктам меню.
@@ -43,7 +44,7 @@ def main():
             print('5. Потестить метод DBManagerHhRu "get_avg_salary()"')
             print('6. Потестить метод DBManagerHhRu "get_vacancies_with_higher_salary()"')
             print('7. Ввести слово и потестить метод DBManagerHhRu "get_vacancies_with_keyword()"')
-            print('8. Выкл.')
+            print('0. Выкл.')
             print()
             user_input = input('Номер действия: ')
 
@@ -51,6 +52,7 @@ def main():
             if user_input == "1":
                 try:
                     execute_sql_script(cur, path_to_sql_script)
+                    input('\nТаблицы успешно созданы, нажмите "Enter": ')
                 except psycopg2.errors.DependentObjectsStillExist:
                     input('Таблицы уже существуют! Нажмите Enter:')
 
@@ -64,7 +66,6 @@ def main():
                             colour='#747671',
                             bar_format='Заполнение таблиц:|{bar}|Emp.count|{n_fmt}/{total_fmt}'
                             )
-                print('\nЭто займет немного времени, ждите плз:\n')
                 try:
                     for employer_id in pbar:
                         hh_ru_api = HeadHunterAPI(employer_id)
@@ -75,7 +76,7 @@ def main():
                         db_hh_ru_fill_employers_table(cur, employer_data)
                         db_hh_ru_fill_vacancies_table(cur, employer_data_of_vacancies)
 
-                    input("\nТаблицы успешно заполнены, нажмите Enter: ")
+                    input('\nТаблицы успешно заполнены, нажмите "Enter": ')
                 except psycopg2.errors.UniqueViolation:
                     print()
                     input('Данные уже есть в таблицах. Вернуться в меню - "Enter": ')
@@ -130,6 +131,7 @@ def main():
             else:
                 input('Нет такого действия! Нажмите Enter, что бы попробовать еще раз: ')
     conn.close()
+
 
 if __name__ == '__main__':
     main()
