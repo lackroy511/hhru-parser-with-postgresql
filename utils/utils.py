@@ -1,13 +1,18 @@
 from configparser import ConfigParser
+import json
 
 import psycopg2
 
 
-def config_parser(filename='database.ini', section="postgresql"):
-
+def config_parser(filename='database.ini', section="postgresql") -> dict:
+    """
+    Читает .ini файл с параметрами для подключения к БД.
+    :param filename: Имя файла / путь до файла.
+    :param section: Выбор параметров.
+    :return: Словарь с параметрами для подключения к БД.
+    """
     parser = ConfigParser()
     parser.read(filename)
-
     db = {}
 
     if parser.has_section(section):
@@ -15,21 +20,30 @@ def config_parser(filename='database.ini', section="postgresql"):
 
         for param in params:
             db[param[0]] = param[1]
-
     else:
         raise Exception(
             'Section {0} is not found in the {1} file.'.format(section, filename))
-
     return db
 
 
-def create_database(params: dict, dbname='hh_ru') -> None:
+def json_reader(path_to_file: str) -> dict:
     """
-    Создает базу данных hh_ru
+    Читает данные из json файла.
+    :param path_to_file: Путь до файла.
+    :return: Cловарь python.
+    """
+    with open(path_to_file, 'r') as file:
+        data = json.load(file)
+    return data
+
+
+def create_database(params: dict, dbname: str = 'postgres') -> None:
+    """
+    Создает базу данных hh_ru.
     :param dbname: Название базы данных.
-    :param params: Словарь с параметрами для подключения к БД
+    :param params: Словарь с параметрами для подключения к БД.
     """
-    conn = psycopg2.connect(dbname='postgres', **params)
+    conn = psycopg2.connect(dbname=dbname, **params)
     conn.autocommit = True
 
     with conn.cursor() as cur:
@@ -38,22 +52,15 @@ def create_database(params: dict, dbname='hh_ru') -> None:
     conn.close()
 
 
-def execute_sql_script(params: dict, dbname='hh_ru', path_to_sql_script='create_db.sql') -> None:
+def execute_sql_script(cur: psycopg2, path_to_sql_script: str) -> None:
     """
-    Выполняет скрипт из sql файлаю
-    :param params: Словарь с параметрами для подключения к БД.
-    :param dbname: Имя базы данных, для которой будет выполнен скрипт.
+    Выполняет скрипт из sql файла.
+    :param cur: Курсор модуля psycopg2.
     :param path_to_sql_script: Путь до sql файла со скриптом.
     """
     with open(path_to_sql_script, 'r') as file:
         sql_script = file.read()
-
-    conn = psycopg2.connect(dbname=dbname, **params)
-    conn.autocommit = True
-
-    with conn.cursor() as cur:
-        cur.execute(sql_script)
-    conn.close()
+    cur.execute(sql_script)
 
 
 def db_hh_ru_fill_employers_table(cur: psycopg2, employer_data: dict) -> None:
