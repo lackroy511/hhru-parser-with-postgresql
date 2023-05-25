@@ -28,6 +28,7 @@ def main():
     user_input = input("Ваш выбор: ")
     if user_input == '1':
         create_database(params, db_name)
+        input('\nБаза данных успешно создана, нажмите "Enter": ')
 
     # Цикл меню, где можно проверить работу кода в проекте.
     # Навигация путем ввода цифр, соответствующих пунктам меню.
@@ -51,6 +52,7 @@ def main():
             if user_input == "1":
                 try:
                     execute_sql_script(cur, path_to_sql_script)
+                    input('\nТаблицы успешно созданы, нажмите "Enter": ')
                 except psycopg2.errors.DependentObjectsStillExist:
                     input('Таблицы уже существуют! Нажмите Enter:')
 
@@ -74,7 +76,7 @@ def main():
                         db_hh_ru_fill_employers_table(cur, employer_data)
                         db_hh_ru_fill_vacancies_table(cur, employer_data_of_vacancies)
 
-                    input("\nТаблицы успешно заполнены, нажмите Enter: ")
+                    input('\nТаблицы успешно заполнены, нажмите "Enter": ')
                 except psycopg2.errors.UniqueViolation:
                     print()
                     input('Данные уже есть в таблицах. Вернуться в меню - "Enter": ')
