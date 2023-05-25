@@ -18,21 +18,20 @@ def main():
 
     path_to_sql_script = join('create_db.sql')  # Путь до sql скрипта для создания таблиц.
     path_to_employers_ids = join('data', 'employers_ids.json')  # Путь до файла с айди компаний.
-    dbname = 'hh_ru'  # Имя БД которая  будет создана.
+    db_name = 'hh_ru'  # Имя БД которая  будет создана.
     params = config_parser()  # <-В аргументы ввести путь до .ini файла с параметрами для подключения к БД и select.
 
     # Выбор, создать БД или не делать ничего.
     print('\n\n\n\n')
     print('1. Создать(удалить и пересоздать, если существует) БД hh_ru.')
-    print('"Enter" ничего не делать и продолжить.')
-    print()
+    print('"Enter" ничего не делать и продолжить.\n')
     user_input = input("Ваш выбор: ")
     if user_input == '1':
-        create_database(params, dbname)
+        create_database(params, db_name)
 
     # Цикл меню, где можно проверить работу кода в проекте.
     # Навигация путем ввода цифр, соответствующих пунктам меню.
-    conn = psycopg2.connect(dbname=dbname, **params)
+    conn = psycopg2.connect(dbname=db_name, **params)
     conn.autocommit = True
     with conn.cursor() as cur:
         while True:
@@ -79,7 +78,10 @@ def main():
                     input("\nТаблицы успешно заполнены, нажмите Enter: ")
                 except psycopg2.errors.UniqueViolation:
                     print()
-                    input('Данные уже есть в таблице. Вернуться в меню - "Enter": ')
+                    input('Данные уже есть в таблицах. Вернуться в меню - "Enter": ')
+                except psycopg2.errors.UndefinedTable:
+                    print()
+                    input('Таблицы не созданы. Вернуться в меню - "Enter": ')
 
             # Вывод результата, который возвращает метод get_companies_and_vacancies_count() класса DBManagerHhRu
             elif user_input == "3":

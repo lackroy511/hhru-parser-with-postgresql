@@ -37,13 +37,13 @@ def json_reader(path_to_file: str) -> dict:
     return data
 
 
-def create_database(params: dict, dbname: str = 'postgres') -> None:
+def create_database(params: dict, dbname) -> None:
     """
     Создает базу данных hh_ru.
     :param dbname: Название базы данных.
     :param params: Словарь с параметрами для подключения к БД.
     """
-    conn = psycopg2.connect(dbname=dbname, **params)
+    conn = psycopg2.connect(dbname='postgres', **params)
     conn.autocommit = True
 
     with conn.cursor() as cur:
