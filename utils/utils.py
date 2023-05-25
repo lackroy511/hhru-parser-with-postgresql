@@ -63,18 +63,18 @@ def execute_sql_script(cur: psycopg2, path_to_sql_script: str) -> None:
     cur.execute(sql_script)
 
 
-def db_hh_ru_fill_employers_table(cur: psycopg2, employer_data: dict) -> None:
+def db_hh_ru_fill_employers_table(cur: psycopg2, employers_data: dict) -> None:
     """
     Заполняет таблицу employers данными.
     :param cur: Курсор модуля psycopg2.
-    :param employer_data: Данные, которыми будет заполнена таблица.
+    :param employers_data: Данные, которыми будет заполнена таблица.
     """
-    employer_id = employer_data['id']
-    employer_name = employer_data['name']
-    employer_industry = employer_data['industries'][0]['name']
-    employer_city = employer_data['area']['name']
-    employer_url = employer_data['site_url']
-    employer_open_vacancies = employer_data['open_vacancies']
+    employer_id = employers_data['id']
+    employer_name = employers_data['name']
+    employer_industry = employers_data['industries'][0]['name']
+    employer_city = employers_data['area']['name']
+    employer_url = employers_data['site_url']
+    employer_open_vacancies = employers_data['open_vacancies']
 
     cur.execute("""
     INSERT INTO employers (employer_id, 

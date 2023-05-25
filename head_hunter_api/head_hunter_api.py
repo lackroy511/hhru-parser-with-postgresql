@@ -43,7 +43,6 @@ class HeadHunterAPI(BaseClassForAPI):
         }
         vacancies_data = {'items': []}
 
-
         while True:
             response = requests.get(self.url_for_employer_vacancies, params=params)
             data = response.json()
@@ -53,9 +52,6 @@ class HeadHunterAPI(BaseClassForAPI):
             if data['pages'] - 1 == data['page']:
                 break
 
-        vacancies_data['number of vacancies'] = data['found']
+        vacancies_data['open_vacancies'] = data['found']
 
         return vacancies_data
-
-
-
