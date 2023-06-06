@@ -2,9 +2,10 @@ from configparser import ConfigParser
 import json
 
 import psycopg2
+from tqdm import tqdm
 
 
-def config_parser(filename='database.ini', section="postgresql") -> dict:
+def config_parser(filename: str = 'database.ini', section: str = "postgresql") -> dict:
     """
     Читает .ini файл с параметрами для подключения к БД.
     :param filename: Имя файла / путь до файла.
@@ -37,18 +38,34 @@ def json_reader(path_to_file: str) -> dict:
     return data
 
 
-def create_database(params: dict, dbname) -> None:
+def create_pbar(iterable: list or any) -> tqdm:
+    """
+    Для красоты и наглядности создает в консоли шкалу загрузки данных и заполнения таблиц.
+    :param iterable: Любой итерируемый объект.
+    :return: Объект pbar.
+    """
+    pbar = tqdm(iterable,
+                leave=True,
+                ncols=60,
+                colour='#747671',
+                bar_format='Заполнение таблиц:|{bar}|Emp.count|{n_fmt}/{total_fmt}'
+                )
+
+    return pbar
+
+
+def create_database(params: dict, db_name: str) -> None:
     """
     Создает базу данных hh_ru.
-    :param dbname: Название базы данных.
+    :param db_name: Название базы данных.
     :param params: Словарь с параметрами для подключения к БД.
     """
     conn = psycopg2.connect(dbname='postgres', **params)
     conn.autocommit = True
 
     with conn.cursor() as cur:
-        cur.execute(f"DROP DATABASE IF EXISTS {dbname}")
-        cur.execute(f"CREATE DATABASE {dbname}")
+        cur.execute(f"DROP DATABASE IF EXISTS {db_name}")
+        cur.execute(f"CREATE DATABASE {db_name}")
     conn.close()
 
 
@@ -139,3 +156,25 @@ def db_hh_ru_fill_vacancies_table(cur: psycopg2, vacancy_data: dict) -> None:
                                published_at,
                                employer_id)
                     )
+
+
+def print_rows(rows) -> None:
+    """
+    Печатает в консоль дынные из SQL таблицы.
+    :param rows: Данные из SQL таблицы
+    """
+    for row in rows:
+        print(row)
+    input('\nВернуться в меню - "Enter": ')
+
+
+def print_rows_with_counter(rows) -> None:
+    """
+    Печатает в консоль дынные из SQL таблицы.
+    :param rows: Данные из SQL таблицы
+    """
+    counter = 1
+    for row in rows:
+        print(f'№{counter} {row}')
+        counter += 1
+    input('\nВернуться в меню - "Enter": ')
