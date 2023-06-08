@@ -27,6 +27,21 @@ def config_parser(filename: str = 'database.ini', section: str = "postgresql") -
     return db
 
 
+def create_database(params: dict, db_name: str) -> None:
+    """
+    Создает базу данных hh_ru.
+    :param db_name: Название базы данных.
+    :param params: Словарь с параметрами для подключения к БД.
+    """
+    conn = psycopg2.connect(dbname='postgres', **params)
+    conn.autocommit = True
+
+    with conn.cursor() as cur:
+        cur.execute(f"DROP DATABASE IF EXISTS {db_name}")
+        cur.execute(f"CREATE DATABASE {db_name}")
+    conn.close()
+
+
 def json_reader(path_to_file: str) -> dict:
     """
     Читает данные из json файла.
@@ -36,6 +51,17 @@ def json_reader(path_to_file: str) -> dict:
     with open(path_to_file, 'r') as file:
         data = json.load(file)
     return data
+
+
+def execute_sql_script(cur: psycopg2, path_to_sql_script: str) -> None:
+    """
+    Выполняет скрипт из sql файла.
+    :param cur: Курсор модуля psycopg2.
+    :param path_to_sql_script: Путь до sql файла со скриптом.
+    """
+    with open(path_to_sql_script, 'r') as file:
+        sql_script = file.read()
+    cur.execute(sql_script)
 
 
 def create_pbar(iterable: list or any) -> tqdm:
@@ -52,110 +78,6 @@ def create_pbar(iterable: list or any) -> tqdm:
                 )
 
     return pbar
-
-
-def create_database(params: dict, db_name: str) -> None:
-    """
-    Создает базу данных hh_ru.
-    :param db_name: Название базы данных.
-    :param params: Словарь с параметрами для подключения к БД.
-    """
-    conn = psycopg2.connect(dbname='postgres', **params)
-    conn.autocommit = True
-
-    with conn.cursor() as cur:
-        cur.execute(f"DROP DATABASE IF EXISTS {db_name}")
-        cur.execute(f"CREATE DATABASE {db_name}")
-    conn.close()
-
-
-def execute_sql_script(cur: psycopg2, path_to_sql_script: str) -> None:
-    """
-    Выполняет скрипт из sql файла.
-    :param cur: Курсор модуля psycopg2.
-    :param path_to_sql_script: Путь до sql файла со скриптом.
-    """
-    with open(path_to_sql_script, 'r') as file:
-        sql_script = file.read()
-    cur.execute(sql_script)
-
-
-def db_hh_ru_fill_employers_table(cur: psycopg2, employers_data: dict) -> None:
-    """
-    Заполняет таблицу employers данными.
-    :param cur: Курсор модуля psycopg2.
-    :param employers_data: Данные, которыми будет заполнена таблица.
-    """
-    employer_id = employers_data['id']
-    employer_name = employers_data['name']
-    employer_industry = employers_data['industries'][0]['name']
-    employer_city = employers_data['area']['name']
-    employer_url = employers_data['site_url']
-    employer_open_vacancies = employers_data['open_vacancies']
-
-    cur.execute("""
-    INSERT INTO employers (employer_id, 
-                           employer_name, 
-                           employer_industry, 
-                           employer_city, 
-                           employer_url, 
-                           employer_open_vacancies) 
-    VALUES (%s, %s, %s, %s, %s, %s) """, (
-                            employer_id,
-                            employer_name,
-                            employer_industry,
-                            employer_city,
-                            employer_url,
-                            employer_open_vacancies)
-                )
-
-
-def db_hh_ru_fill_vacancies_table(cur: psycopg2, vacancy_data: dict) -> None:
-    """
-    Заполняет таблицу vacancies данными.
-    :param cur: Курсор модуля psycopg2.
-    :param vacancy_data: Данные, которыми будет заполнена таблица.
-    """
-
-    vacancies = vacancy_data['items']
-
-    for vacancy in vacancies:
-
-        vacancy_id = vacancy['id']
-        vacancy_name = vacancy['name']
-        vacancy_city = vacancy['area']['name']
-        vacancy_url = vacancy['alternate_url']
-        # Приведение зарплаты "от" и "до" к одному значению.
-        vacancy_salary = None
-        if vacancy['salary']:
-            if vacancy['salary']["from"] and vacancy['salary']["to"]:
-                vacancy_salary = (vacancy['salary']["from"] + vacancy['salary']["to"]) / 2
-
-            elif vacancy['salary']["from"] is not None:
-                vacancy_salary = vacancy['salary']["from"]
-
-            elif vacancy['salary']["to"] is not None:
-                vacancy_salary = vacancy['salary']["to"]
-        published_at = vacancy['published_at']
-        employer_id = vacancy['employer']['id']
-
-        cur.execute("""
-        INSERT INTO vacancies (vacancy_id, 
-                               vacancy_name,
-                               vacancy_city,
-                               vacancy_url,
-                               vacancy_salary,
-                               published_at,
-                               employer_id)
-        VALUES (%s, %s, %s, %s, %s, %s, %s)""", (
-                               vacancy_id,
-                               vacancy_name,
-                               vacancy_city,
-                               vacancy_url,
-                               vacancy_salary,
-                               published_at,
-                               employer_id)
-                    )
 
 
 def print_rows(rows) -> None:

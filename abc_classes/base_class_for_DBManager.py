@@ -4,7 +4,7 @@ import psycopg2
 
 
 class BaseClassForDBManager(ABC):
-    """Абстрактный класс DBManagerHhRu"""
+    """Абстрактный класс db_classes"""
 
     @abstractmethod
     def get_companies_and_vacancies_count(self, cur: psycopg2) -> list[(), ()]:

@@ -1,4 +1,4 @@
-from src.base_class_for_api import BaseClassForAPI
+from abc_classes.base_class_for_api import BaseClassForAPI
 
 import requests
 
@@ -11,12 +11,10 @@ class HeadHunterAPI(BaseClassForAPI):
         Конструктор класса
         :param employer_id: id работодателя на ресурсе hh.ru.
         """
-        self.url_for_employer = 'https://api.hh.ru/employers/'
 
         self.employer_id = employer_id
-        self.employer_info = self.get_employer_data()
-
-        self.url_for_employer_vacancies = self.employer_info['vacancies_url']
+        self.url_for_employer = 'https://api.hh.ru/employers/'
+        self.url_for_employer_vacancies = None
 
     def get_employer_data(self) -> dict:
         """
@@ -27,7 +25,7 @@ class HeadHunterAPI(BaseClassForAPI):
 
         response = requests.get(url)
         employer_data = response.json()
-
+        self.url_for_employer_vacancies = employer_data['vacancies_url']
         return employer_data
 
     def get_vacancies_data_of_employer(self) -> dict:
