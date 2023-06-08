@@ -1,4 +1,4 @@
-from src.base_class_for_DBManager import BaseClassForDBManager
+from abc_classes.base_class_for_DBManager import BaseClassForDBManager
 
 import psycopg2
 
