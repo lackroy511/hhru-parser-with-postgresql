@@ -16,6 +16,7 @@ from os.path import join
 import psycopg2
 import psycopg2.errors
 
+import psycopg2
 
 def main():
 
@@ -25,9 +26,9 @@ def main():
     params = config_parser()  # <-В аргументы ввести путь до .ini файла с параметрами для подключения к БД и select.
 
     choosing_whether_to_create_db(params, db_name)
-
+    
     # Цикл меню, где можно проверить работу кода в проекте.
-    # Навигация путем ввода цифр, соответствующих пунктам меню.
+    # Навигация путем ввода цифр, соответствующих пунктам меню.1
     conn = psycopg2.connect(dbname=db_name, **params)
     conn.autocommit = True
     with conn.cursor() as cur:
