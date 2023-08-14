@@ -118,6 +118,23 @@ files = [
 ]
 
 [[package]]
+name = "isort"
+version = "5.12.0"
+description = "A Python utility / library to sort Python imports."
+optional = false
+python-versions = ">=3.8.0"
+files = [
+    {file = "isort-5.12.0-py3-none-any.whl", hash = "sha256:f84c2818376e66cf843d497486ea8fed8700b340f308f076c6fb1229dff318b6"},
+    {file = "isort-5.12.0.tar.gz", hash = "sha256:8bef7dde241278824a6d83f44a544709b065191b95b6e50894bdc722fcba0504"},
+]
+
+[package.extras]
+colors = ["colorama (>=0.4.3)"]
+pipfile-deprecated-finder = ["pip-shims (>=0.5.2)", "pipreqs", "requirementslib"]
+plugins = ["setuptools"]
+requirements-deprecated-finder = ["pip-api", "pipreqs"]
+
+[[package]]
 name = "psycopg2"
 version = "2.9.6"
 description = "psycopg2 - Python-PostgreSQL Database Adapter"
@@ -200,4 +217,4 @@ zstd = ["zstandard (>=0.18.0)"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.11"
-content-hash = "04ad67662411be916e619dd1a123a488fd8655b77638db2a4d4b52baf4cae079"
+content-hash = "6c25154641abd789c74127822426eae36d1a89e3951896e3af64c0a9b20ed770"

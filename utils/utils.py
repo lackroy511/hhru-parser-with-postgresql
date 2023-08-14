@@ -1,5 +1,5 @@
-from configparser import ConfigParser
 import json
+from configparser import ConfigParser
 
 import psycopg2
 from tqdm import tqdm

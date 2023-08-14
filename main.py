@@ -1,22 +1,15 @@
-from utils.utils import create_pbar
-from utils.utils import json_reader
-from utils.utils import config_parser
-from utils.utils import print_rows
-from utils.utils import print_rows_with_counter
-from utils.user_interaction import print_main_menu
-from utils.user_interaction import try_execute_sql_script
-from utils.user_interaction import try_fill_employers_and_vacancies_table
-from utils.user_interaction import choosing_whether_to_create_db
-
-
-from db_classes.DBManagerHhRu import DBManagerHhRu
-
 from os.path import join
 
 import psycopg2
 import psycopg2.errors
 
-import psycopg2
+from db_classes.DBManagerHhRu import DBManagerHhRu
+from utils.user_interaction import (choosing_whether_to_create_db,
+                                    print_main_menu, try_execute_sql_script,
+                                    try_fill_employers_and_vacancies_table)
+from utils.utils import (config_parser, create_pbar, json_reader, print_rows,
+                         print_rows_with_counter)
+
 
 def main():
 

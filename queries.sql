@@ -14,7 +14,7 @@ select avg(vacancy_salary) as avg_salary
 from vacancies;
 
 -- `get_vacancies_with_higher_salary()`: получает список всех вакансий, у которых зарплата выше средней по всем вакансиям.
-select *  from vacancies
+select * from vacancies
 where vacancy_salary > (select avg(vacancy_salary)
 from vacancies);
 

@@ -1,11 +1,10 @@
-from head_hunter_api.head_hunter_api import HeadHunterAPI
-from utils.utils import execute_sql_script, create_database
-from db_classes.DBFiller import DBFiller
-
-
 import psycopg2
 import psycopg2.errors
 from tqdm import tqdm
+
+from db_classes.DBFiller import DBFiller
+from head_hunter_api.head_hunter_api import HeadHunterAPI
+from utils.utils import create_database, execute_sql_script
 
 
 def choosing_whether_to_create_db(params: dict, db_name: str) -> None:

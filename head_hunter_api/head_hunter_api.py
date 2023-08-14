@@ -1,6 +1,6 @@
-from abc_classes.base_class_for_api import BaseClassForAPI
-
 import requests
+
+from abc_classes.base_class_for_api import BaseClassForAPI
 
 
 class HeadHunterAPI(BaseClassForAPI):
